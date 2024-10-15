@@ -6,15 +6,17 @@ function formatDate(value) {
 }
 
 function ReviewListItem({ item, onDelete }) {
+  const { title, rating, createdAt, content, imgUrl } = item;
   const handleDeleteClick = () => onDelete(item.id);
+
   return (
     <div className="ReviewListItem">
-      <img className="ReviewListItem-img" src={item.imgUrl} alt={item.title} />
+      <img className="ReviewListItem-img" src={imgUrl} alt={title} />
       <div>
-        <h1>{item.title}</h1>
-        <p>{item.rating}</p>
-        <p>{formatDate(item.createdAt)}</p>
-        <p>{item.content}</p>
+        <h1>{title}</h1>
+        <p>{rating}</p>
+        <p>{formatDate(createdAt)}</p>
+        <p>{content}</p>
         <button onClick={handleDeleteClick}>삭제</button>
       </div>
     </div>

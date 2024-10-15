@@ -7,6 +7,8 @@ const LIMIT = 6;
 function App() {
   const [order, setOrder] = useState("createdAt");
   const [items, setItems] = useState([]);
+  const [offset, setOffset] = useState(0);
+  const [hasNext, setHasNext] = useState(false);
 
   const sortedItems = items.sort((a, b) => b[order] - a[order]);
 
@@ -18,15 +20,23 @@ function App() {
   };
 
   const handleLoad = async (options) => {
-    const { reviews } = await getReviews(options);
-    setItems(reviews);
+    const { reviews, paging } = await getReviews(options);
+    if (options.offset === 0) {
+      setItems(reviews);
+    } else {
+      setItems((prevItems) => [...prevItems, ...reviews]);
+    }
+    setOffset(options.offset + reviews.length);
+    setHasNext(paging.hasNext);
   };
 
   useEffect(() => {
     handleLoad({ order, offset: 6, limit: LIMIT });
   }, [order]);
 
-  const handleLoadMore = () => {};
+  const handleLoadMore = () => {
+    handleLoad({ order, offset, limit: LIMIT });
+  };
 
   return (
     <div>
@@ -35,7 +45,7 @@ function App() {
         <button onClick={handleRatingClick}>평점순</button>
       </div>
       <ReviewList items={sortedItems} onDelete={handleDelete} />
-      <button>더보기</button>
+      {hasNext && <button onClick={handleLoadMore}>더보기</button>}
     </div>
   );
 }

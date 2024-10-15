@@ -2,6 +2,8 @@ import { getReviews } from "../api";
 import ReviewList from "./ReviewList";
 import { useEffect, useState } from "react";
 
+const LIMIT = 6;
+
 function App() {
   const [order, setOrder] = useState("createdAt");
   const [items, setItems] = useState([]);
@@ -15,14 +17,16 @@ function App() {
     setItems(nextItems);
   };
 
-  const handleLoad = async () => {
-    const { reviews } = await getReviews();
+  const handleLoad = async (options) => {
+    const { reviews } = await getReviews(options);
     setItems(reviews);
   };
 
   useEffect(() => {
-    handleLoad();
-  }, []);
+    handleLoad({ order, offset: 6, limit: LIMIT });
+  }, [order]);
+
+  const handleLoadMore = () => {};
 
   return (
     <div>
@@ -31,6 +35,7 @@ function App() {
         <button onClick={handleRatingClick}>평점순</button>
       </div>
       <ReviewList items={sortedItems} onDelete={handleDelete} />
+      <button>더보기</button>
     </div>
   );
 }

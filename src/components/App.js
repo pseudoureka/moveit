@@ -31,7 +31,7 @@ function App() {
   };
 
   useEffect(() => {
-    handleLoad({ order, offset: 6, limit: LIMIT });
+    handleLoad({ order, offset: 0, limit: LIMIT });
   }, [order]);
 
   const handleLoadMore = () => {

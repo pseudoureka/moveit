@@ -10,6 +10,7 @@ function App() {
   const [offset, setOffset] = useState(0);
   const [hasNext, setHasNext] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingError, setLoadingError] = useState(null);
 
   const sortedItems = items.sort((a, b) => b[order] - a[order]);
 
@@ -24,9 +25,10 @@ function App() {
     let results;
     try {
       setIsLoading(true);
+      setLoadingError(null);
       results = await getReviews(options);
     } catch (error) {
-      console.log(error);
+      setLoadingError(error);
       return;
     } finally {
       setIsLoading(false);
@@ -61,6 +63,7 @@ function App() {
           더보기
         </button>
       )}
+      {loadingError?.message && <span>{loadingError.message}</span>}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./ReviewForm.css";
 import FileInput from "./FileInput";
+import RatingInput from "./RatingInput";
 
 const INITIAL_VALUE = {
   title: "",
@@ -12,33 +13,21 @@ const INITIAL_VALUE = {
 function ReviewForm() {
   const [values, setValues] = useState(INITIAL_VALUE);
 
-  const handleChange = (name, value, type) => {
+  const handleChange = (name, value) => {
     setValues((prevValues) => ({
       ...prevValues,
-      // [name]: value,
-      [name]: sanitize(type, value),
+      [name]: value,
     }));
   };
 
   const handleInputChange = (e) => {
-    const { name, value, type } = e.target;
-    handleChange(name, value, type);
+    const { name, value } = e.target;
+    handleChange(name, value);
   };
-
-  function sanitize(type, value) {
-    switch (type) {
-      case "number":
-        return Number(value) || 0;
-
-      default:
-        return value;
-    }
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(values);
-    console.log(typeof values["rating"]);
     setValues(INITIAL_VALUE);
   };
 
@@ -48,7 +37,7 @@ function ReviewForm() {
     <form className="ReviewForm" onSubmit={handleSubmit}>
       <FileInput name="imgFile" value={values.imgFile} onChange={handleChange} />
       <input name="title" value={values.title} onChange={handleInputChange} />
-      <input name="rating" min={0} max={5} type="number" value={values.rating} onChange={handleInputChange} />
+      <RatingInput name="rating" value={values.rating} onChange={handleChange} />
       <textarea name="content" value={values.content} onChange={handleInputChange} />
       <button type="submit" disabled={!isFormValid}>
         확인

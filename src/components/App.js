@@ -52,13 +52,17 @@ function App() {
     handleLoad({ order, offset, limit: LIMIT });
   };
 
+  const handleSubmitSuccess = (review) => {
+    setItems((prevItems) => [review, ...prevItems]);
+  };
+
   return (
     <div>
       <div>
         <button onClick={handleNewestClick}>최신순</button>
         <button onClick={handleRatingClick}>평점순</button>
       </div>
-      <ReviewForm />
+      <ReviewForm onSubmitSuccess={handleSubmitSuccess} />
       <ReviewList items={sortedItems} onDelete={handleDelete} />
       {hasNext && (
         <button disabled={isLoading} onClick={handleLoadMore}>

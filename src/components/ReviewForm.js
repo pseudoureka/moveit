@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./ReviewForm.css";
 import FileInput from "./FileInput";
 import RatingInput from "./RatingInput";
+import { createReview } from "../api";
 
 const INITIAL_VALUE = {
   title: "",
@@ -10,8 +11,10 @@ const INITIAL_VALUE = {
   imgFile: null,
 };
 
-function ReviewForm() {
+function ReviewForm({ onSubmitSuccess }) {
   const [values, setValues] = useState(INITIAL_VALUE);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submittingError, setSubmittingError] = useState(null);
 
   const handleChange = (name, value) => {
     setValues((prevValues) => ({
@@ -25,13 +28,32 @@ function ReviewForm() {
     handleChange(name, value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(values);
+
+    const formData = new FormData();
+    formData.append("title", values.title);
+    formData.append("rating", values.rating);
+    formData.append("content", values.content);
+    formData.append("imgFile", values.imgFile);
+
+    let result;
+
+    try {
+      setSubmittingError(null);
+      setIsSubmitting(true);
+      result = await createReview(formData);
+    } catch (e) {
+      setSubmittingError(e);
+    } finally {
+      setIsSubmitting(false);
+    }
+    const { review } = result;
+    onSubmitSuccess(review);
     setValues(INITIAL_VALUE);
   };
 
-  const isFormValid = values.title && values.rating && values.content;
+  const isFormValid = values.title && values.rating && values.content && values.imgFile;
 
   return (
     <form className="ReviewForm" onSubmit={handleSubmit}>
@@ -39,9 +61,10 @@ function ReviewForm() {
       <input name="title" value={values.title} onChange={handleInputChange} />
       <RatingInput name="rating" value={values.rating} onChange={handleChange} />
       <textarea name="content" value={values.content} onChange={handleInputChange} />
-      <button type="submit" disabled={!isFormValid}>
+      <button type="submit" disabled={isSubmitting || !isFormValid}>
         확인
       </button>
+      {submittingError?.message && <p>{submittingError.message}</p>}
     </form>
   );
 }

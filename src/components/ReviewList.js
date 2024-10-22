@@ -35,11 +35,12 @@ function ReviewList({ items, onDelete }) {
     <ul>
       {items.map((item) => {
         if (item.id === editingId) {
-          const { title, rating, content } = item;
+          const { title, rating, content, imgUrl } = item;
           const initialValues = { title, rating, content };
+
           return (
             <li key={item.title}>
-              <ReviewForm initialValues={initialValues} />
+              <ReviewForm initialValues={initialValues} initialPreview={imgUrl} />
             </li>
           );
         }

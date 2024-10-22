@@ -11,7 +11,7 @@ const INITIAL_VALUE = {
   imgFile: null,
 };
 
-function ReviewForm({ onSubmitSuccess, initialValues = INITIAL_VALUE }) {
+function ReviewForm({ onSubmitSuccess, initialValues = INITIAL_VALUE, initialPreview }) {
   const [values, setValues] = useState(initialValues);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittingError, setSubmittingError] = useState(null);
@@ -58,7 +58,12 @@ function ReviewForm({ onSubmitSuccess, initialValues = INITIAL_VALUE }) {
 
   return (
     <form className="ReviewForm" onSubmit={handleSubmit}>
-      <FileInput name="imgFile" value={values.imgFile} onChange={handleChange} />
+      <FileInput
+        name="imgFile"
+        value={values.imgFile}
+        onChange={handleChange}
+        initialPreview={initialPreview}
+      />
       <input name="title" value={values.title} onChange={handleInputChange} />
       <RatingInput name="rating" value={values.rating} onChange={handleChange} />
       <textarea name="content" value={values.content} onChange={handleInputChange} />

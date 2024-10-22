@@ -31,6 +31,9 @@ function ReviewListItem({ item, onDelete, onEdit }) {
 
 function ReviewList({ items, onDelete }) {
   const [editingId, setEditingId] = useState();
+
+  const handleCancel = () => setEditingId(null);
+
   return (
     <ul>
       {items.map((item) => {
@@ -40,7 +43,11 @@ function ReviewList({ items, onDelete }) {
 
           return (
             <li key={item.title}>
-              <ReviewForm initialValues={initialValues} initialPreview={imgUrl} />
+              <ReviewForm
+                initialValues={initialValues}
+                initialPreview={imgUrl}
+                onCancel={handleCancel}
+              />
             </li>
           );
         }

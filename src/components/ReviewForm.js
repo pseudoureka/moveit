@@ -11,7 +11,7 @@ const INITIAL_VALUE = {
   imgFile: null,
 };
 
-function ReviewForm({ onSubmitSuccess, initialValues = INITIAL_VALUE, initialPreview }) {
+function ReviewForm({ onSubmitSuccess, initialValues = INITIAL_VALUE, initialPreview, onCancel }) {
   const [values, setValues] = useState(initialValues);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittingError, setSubmittingError] = useState(null);
@@ -67,6 +67,7 @@ function ReviewForm({ onSubmitSuccess, initialValues = INITIAL_VALUE, initialPre
       <input name="title" value={values.title} onChange={handleInputChange} />
       <RatingInput name="rating" value={values.rating} onChange={handleChange} />
       <textarea name="content" value={values.content} onChange={handleInputChange} />
+      {onCancel && <button onClick={onCancel}>취소</button>}
       <button type="submit" disabled={!isFormValid || isSubmitting}>
         확인
       </button>

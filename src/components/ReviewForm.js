@@ -11,8 +11,8 @@ const INITIAL_VALUE = {
   imgFile: null,
 };
 
-function ReviewForm({ onSubmitSuccess }) {
-  const [values, setValues] = useState(INITIAL_VALUE);
+function ReviewForm({ onSubmitSuccess, initialValues = INITIAL_VALUE }) {
+  const [values, setValues] = useState(initialValues);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittingError, setSubmittingError] = useState(null);
 
@@ -51,7 +51,7 @@ function ReviewForm({ onSubmitSuccess }) {
     }
     const { review } = result;
     onSubmitSuccess(review);
-    setValues(INITIAL_VALUE);
+    setValues(initialValues);
   };
 
   const isFormValid = values.title && values.rating && values.content;

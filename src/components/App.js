@@ -1,4 +1,4 @@
-import { getReviews } from "../api";
+import { createReview, getReviews } from "../api";
 import ReviewForm from "./ReviewForm";
 import ReviewList from "./ReviewList";
 import { useEffect, useState } from "react";
@@ -52,7 +52,7 @@ function App() {
     handleLoad({ order, offset, limit: LIMIT });
   };
 
-  const handleSubmitSuccess = (review) => {
+  const handleCreateSuccess = (review) => {
     setItems((prevItems) => [review, ...prevItems]);
   };
 
@@ -62,7 +62,7 @@ function App() {
         <button onClick={handleNewestClick}>최신순</button>
         <button onClick={handleRatingClick}>평점순</button>
       </div>
-      <ReviewForm onSubmitSuccess={handleSubmitSuccess} />
+      <ReviewForm onSubmitSuccess={handleCreateSuccess} onSubmit={createReview} />
       <ReviewList items={sortedItems} onDelete={handleDelete} />
       {hasNext && (
         <button disabled={isLoading} onClick={handleLoadMore}>

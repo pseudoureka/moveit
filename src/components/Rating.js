@@ -1,11 +1,10 @@
 import "./Rating.css";
 
-const RATINGS = [1, 2, 3, 4, 5];
-
-function Star({ selected = false, onSelect, onHover, rating }) {
+function Star({ selected = false, onSelect, rating, onHover }) {
   const className = `Rating-star ${selected ? "selected" : ""}`;
 
   const handleClick = onSelect ? () => onSelect(rating) : undefined;
+
   const handleMouseOver = onHover ? () => onHover(rating) : undefined;
 
   return (
@@ -15,14 +14,16 @@ function Star({ selected = false, onSelect, onHover, rating }) {
   );
 }
 
-function Rating({ value = 0, onSelect, onHover, onMouseOut, className }) {
+const RATINGS = [1, 2, 3, 4, 5];
+
+function Rating({ className, value = 0, rating, onSelect, onHover, onMouseOut }) {
   return (
     <div className={className} onMouseOut={onMouseOut}>
       {RATINGS.map((rating) => (
         <Star
           key={rating}
-          rating={rating}
           selected={value >= rating}
+          rating={rating}
           onSelect={onSelect}
           onHover={onHover}
         />

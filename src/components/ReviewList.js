@@ -12,7 +12,7 @@ function ReviewListItem({ item, onDelete, onEdit }) {
   const { title, rating, createdAt, content, imgUrl } = item;
   const handleDeleteClick = () => onDelete(item.id);
 
-  const handleEditingClick = () => onEdit(item.id);
+  const handleEditClick = () => onEdit(item.id);
 
   return (
     <div className="ReviewListItem">
@@ -22,7 +22,7 @@ function ReviewListItem({ item, onDelete, onEdit }) {
         <Rating value={rating} />
         <p>{formatDate(createdAt)}</p>
         <p>{content}</p>
-        <button onClick={handleEditingClick}>수정</button>
+        <button onClick={handleEditClick}>수정</button>
         <button onClick={handleDeleteClick}>삭제</button>
       </div>
     </div>
@@ -30,7 +30,7 @@ function ReviewListItem({ item, onDelete, onEdit }) {
 }
 
 function ReviewList({ items, onDelete }) {
-  const [editingId, setEditingId] = useState(null);
+  const [editingId, setEditingId] = useState();
 
   const handleCancel = () => setEditingId(null);
 
@@ -38,15 +38,15 @@ function ReviewList({ items, onDelete }) {
     <ul>
       {items.map((item) => {
         if (item.id === editingId) {
-          const { imgUrl, title, rating, content } = item;
+          const { title, rating, content, imgUrl } = item;
           const initialValues = { title, rating, content };
 
           return (
             <li key={item.title}>
               <ReviewForm
                 initialValues={initialValues}
-                onCancel={handleCancel}
                 initialPreview={imgUrl}
+                onCancel={handleCancel}
               />
             </li>
           );

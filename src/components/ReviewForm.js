@@ -59,7 +59,7 @@ function ReviewForm({
     setValues(initialValues);
   };
 
-  const isFormValid = values.title && values.rating && values.content && values.imgFile;
+  const isFormValid = values.title && values.rating && values.content;
 
   return (
     <form className="ReviewForm" onSubmit={handleSubmit}>

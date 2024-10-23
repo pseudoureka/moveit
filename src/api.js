@@ -1,4 +1,4 @@
-const BASE_URL = "https://learn.codeit.kr/3877/film-reviews";
+const BASE_URL = "https://learn.codeit.kr/8877/film-reviews";
 
 export async function getReviews({ order = "createdAt", offset = 0, limit = 6 }) {
   const query = `order=${order}&offset=${offset}&limit=${limit}`;
@@ -18,6 +18,19 @@ export async function createReview(formData) {
   });
   if (!response.ok) {
     throw new Error("리뷰를 생성하는데 실패했습니다.");
+  }
+
+  const body = await response.json();
+  return body;
+}
+
+export async function updateReview(id, formData) {
+  const response = await fetch(`${BASE_URL}/${id}`, {
+    method: "PUT",
+    body: formData,
+  });
+  if (!response.ok) {
+    throw new Error("리뷰를 수정하는데 실패했습니다.");
   }
 
   const body = await response.json();

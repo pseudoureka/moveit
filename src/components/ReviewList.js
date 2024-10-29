@@ -1,5 +1,11 @@
 import "./ReviewList.css";
 
+function format(value) {
+  const date = new Date(value);
+
+  return `${date.getFullYear()}. ${date.getMonth() + 1}. ${date.getDate()}`;
+}
+
 function ReviewListItem({ item }) {
   const { title, rating, createdAt, content, imgUrl } = item;
 
@@ -9,7 +15,7 @@ function ReviewListItem({ item }) {
       <div>
         <h1>{title}</h1>
         <p>{rating}</p>
-        <p>{createdAt}</p>
+        <p>{format(createdAt)}</p>
         <p>{content}</p>
       </div>
     </div>

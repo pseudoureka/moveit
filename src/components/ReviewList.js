@@ -1,19 +1,16 @@
 import "./ReviewList.css";
 
-function formatDate(value) {
-  const date = new Date(value);
-  return `${date.getFullYear()}. ${date.getMonth() + 1}. ${date.getDate()}`;
-}
-
 function ReviewListItem({ item }) {
+  const { title, rating, createdAt, content, imgUrl } = item;
+
   return (
     <div className="ReviewListItem">
-      <img className="ReviewListItem-img" src={item.imgUrl} alt={item.title} />
+      <img className="ReviewListItem-img" src={imgUrl} alt={title} />
       <div>
-        <h1>{item.title}</h1>
-        <p>{item.rating}</p>
-        <p>{formatDate(item.createdAt)}</p>
-        <p>{item.content}</p>
+        <h1>{title}</h1>
+        <p>{rating}</p>
+        <p>{createdAt}</p>
+        <p>{content}</p>
       </div>
     </div>
   );
@@ -24,7 +21,7 @@ function ReviewList({ items }) {
     <ul>
       {items.map((item) => {
         return (
-          <li>
+          <li key={item.id}>
             <ReviewListItem item={item} />
           </li>
         );

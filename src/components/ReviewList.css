@@ -5,8 +5,8 @@
 }
 
 .ReviewListItem-img {
-  width: 200px;
   height: 300px;
-  object-fit: cover;
+  width: 200px;
   margin-right: 20px;
+  object-fit: cover;
 }

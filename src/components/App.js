@@ -63,14 +63,14 @@ function App() {
   };
 
   return (
-    <LocaleProvider defaultValue={"en"}>
+    <LocaleProvider defaultValue={"ko"}>
       <div>
         <LocaleSelect />
+        <ReviewForm onSubmitSuccess={handleCreateSuccess} onSubmit={createReview} />
         <div>
           <button onClick={handleNewestClick}>최신순</button>
           <button onClick={handleRatingClick}>평점순</button>
         </div>
-        <ReviewForm onSubmitSuccess={handleCreateSuccess} onSubmit={createReview} />
         <ReviewList
           items={sortedItems}
           onDelete={handleDelete}

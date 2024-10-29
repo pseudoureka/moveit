@@ -19,7 +19,6 @@ export function LocaleProvider({ defaultValue = "ko", children }) {
 
 export function useLocale() {
   const context = useContext(LocaleContext);
-  console.log(context);
   if (!context) {
     throw new Error("반드시 LocaleProvider 안에서 만들어야 합니다.");
   }
@@ -29,7 +28,6 @@ export function useLocale() {
 
 export function useSetLocale() {
   const context = useContext(LocaleContext);
-  console.log(context);
   if (!context) {
     throw new Error("반드시 LocaleProvider 안에서 만들어야 합니다.");
   }

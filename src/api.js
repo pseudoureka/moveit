@@ -10,6 +10,18 @@ export async function getReviews({ order = "createdAt", offset = 0, limit = 6 })
   return body;
 }
 
+export async function createReview(formData) {
+  const response = await fetch(`${BASE_URL}`, {
+    method: "POST",
+    body: formData,
+  });
+  const body = response.json();
+  if (!response.ok) {
+    throw new Error("리뷰를 생성하는데 실패했습니다.");
+  }
+  return body;
+}
+
 export async function deleteReview(id) {
   const response = await fetch(`${BASE_URL}/${id}`, {
     method: "DELETE",

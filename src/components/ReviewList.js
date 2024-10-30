@@ -1,5 +1,7 @@
+import { useState } from "react";
 import Rating from "./Rating";
 import "./ReviewList.css";
+import ReviewForm from "./ReviewForm";
 
 function format(value) {
   const date = new Date(value);
@@ -7,9 +9,11 @@ function format(value) {
   return `${date.getFullYear()}. ${date.getMonth() + 1}. ${date.getDate()}`;
 }
 
-function ReviewListItem({ item, onDelete }) {
+function ReviewListItem({ item, onDelete, onEdit }) {
   const { title, rating, createdAt, content, imgUrl } = item;
+
   const handleDeleteClick = () => onDelete(item.id);
+  const handleEditClick = () => onEdit(item.id);
 
   return (
     <div className="ReviewListItem">
@@ -20,18 +24,29 @@ function ReviewListItem({ item, onDelete }) {
         <p>{format(createdAt)}</p>
         <p>{content}</p>
         <button onClick={handleDeleteClick}>삭제</button>
+        <button onClick={handleEditClick}>수정</button>
       </div>
     </div>
   );
 }
 
 function ReviewList({ items, onDelete }) {
+  const [editingId, setEditingId] = useState();
+
   return (
     <ul>
       {items.map((item) => {
+        if (editingId === item.id) {
+          return (
+            <li key={item.id}>
+              <ReviewForm />
+            </li>
+          );
+        }
+
         return (
           <li key={item.id}>
-            <ReviewListItem item={item} onDelete={onDelete} />
+            <ReviewListItem item={item} onDelete={onDelete} onEdit={setEditingId} />
           </li>
         );
       })}

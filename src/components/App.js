@@ -58,9 +58,13 @@ function App() {
     setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
+  const handleSubmit = (review) => {
+    setItems((prevItems) => [review, ...prevItems]);
+  };
+
   return (
     <div>
-      <ReviewForm />
+      <ReviewForm onSubmit={handleSubmit} />
       <button onClick={handleNewestButton}>최신순</button>
       <button onClick={handleBestButton}>평점순</button>
       <ReviewList items={sortedItems} onDelete={handleDelete} />

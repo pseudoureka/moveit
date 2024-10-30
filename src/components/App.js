@@ -1,6 +1,6 @@
 import ReviewList from "./ReviewList";
 import { useEffect, useState } from "react";
-import { getReviews } from "../api";
+import { deleteReview, getReviews } from "../api";
 import ReviewForm from "./ReviewForm";
 
 const LIMIT = 6;
@@ -51,9 +51,11 @@ function App() {
     handleLoad({ order, offset, limit: LIMIT });
   };
 
-  const handleDelete = (id) => {
-    const nextItems = items.filter((item) => item.id !== id);
-    setItems(nextItems);
+  const handleDelete = async (id) => {
+    const result = await deleteReview(id);
+    if (!result) return;
+
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   return (

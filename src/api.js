@@ -1,4 +1,4 @@
-const BASE_URL = "https://learn.codeit.kr/1489/film-reviews";
+const BASE_URL = "https://learn.codeit.kr/1419/film-reviews";
 
 export async function getReviews({ order = "createdAt", offset = 0, limit = 6 }) {
   const query = `?order=${order}&offset=${offset}&limit=${limit}`;

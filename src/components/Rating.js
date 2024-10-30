@@ -2,17 +2,30 @@ import "./Rating.css";
 
 const RATINGS = [1, 2, 3, 4, 5];
 
-function Star({ selected = false }) {
+function Star({ selected = false, rating, onSelect, onHover }) {
   const className = `Rating-star ${selected ? "selected" : ""}`;
 
-  return <span className={className}>★</span>;
+  const handleSelect = onSelect ? () => onSelect(rating) : undefined;
+  const handleMouseOver = onHover ? () => onHover(rating) : undefined;
+
+  return (
+    <span className={className} onMouseOver={handleMouseOver} onClick={handleSelect}>
+      ★
+    </span>
+  );
 }
 
-function Rating({ value = 0 }) {
+function Rating({ value = 0, className, onSelect, onHover, onMouseOut }) {
   return (
-    <div>
+    <div className={className} onMouseOut={onMouseOut}>
       {RATINGS.map((rating) => (
-        <Star key={rating} selected={value >= rating} />
+        <Star
+          key={rating}
+          selected={value >= rating}
+          onSelect={onSelect}
+          onHover={onHover}
+          rating={rating}
+        />
       ))}
     </div>
   );

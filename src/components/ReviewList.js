@@ -30,16 +30,26 @@ function ReviewListItem({ item, onDelete, onEdit }) {
   );
 }
 
-function ReviewList({ items, onDelete }) {
+function ReviewList({ items, onDelete, onUpdateSuccess, onUpdate }) {
   const [editingId, setEditingId] = useState();
 
   return (
     <ul>
       {items.map((item) => {
         if (editingId === item.id) {
+          const { id, title, rating, content, imgUrl } = item;
+          const initialValue = { title, rating, content, imgFile: null };
+
+          const handleSubmit = (formData) => onUpdate(id, formData);
+
           return (
             <li key={item.id}>
-              <ReviewForm />
+              <ReviewForm
+                initialValue={initialValue}
+                initialPreview={imgUrl}
+                onSubmit={handleSubmit}
+                onSubmitSuccess={onUpdateSuccess}
+              />
             </li>
           );
         }

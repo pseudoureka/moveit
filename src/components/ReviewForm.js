@@ -2,7 +2,6 @@ import { useState } from "react";
 import "./ReviewForm.css";
 import FileInput from "./FileInput";
 import RatingInput from "./RatingInput";
-import { createReview } from "../api";
 
 const INITIAL_VALUE = {
   title: "",
@@ -11,8 +10,8 @@ const INITIAL_VALUE = {
   imgFile: null,
 };
 
-function ReviewForm({ onSubmit }) {
-  const [value, setValue] = useState(INITIAL_VALUE);
+function ReviewForm({ onSubmitSuccess, onSubmit, initialValue = INITIAL_VALUE, initialPreview }) {
+  const [value, setValue] = useState(initialValue);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
@@ -41,7 +40,7 @@ function ReviewForm({ onSubmit }) {
 
     try {
       setIsSubmitting(true);
-      result = await createReview(formData);
+      result = await onSubmit(formData);
     } catch (error) {
       setSubmitError(error);
       return;
@@ -49,13 +48,18 @@ function ReviewForm({ onSubmit }) {
       setIsSubmitting(false);
     }
     const { review } = result;
-    setValue(INITIAL_VALUE);
-    onSubmit(review);
+    setValue(initialValue);
+    onSubmitSuccess(review);
   };
 
   return (
     <form className="ReviewForm">
-      <FileInput name="imgFile" value={value.imgFile} onChange={handleChange} />
+      <FileInput
+        name="imgFile"
+        value={value.imgFile}
+        onChange={handleChange}
+        initialPreview={initialPreview}
+      />
       <input name="title" type="text" value={value.title} onChange={handleInputChange}></input>
       <RatingInput name="rating" value={value.rating} onChange={handleChange} />
       <input name="content" type="text" value={value.content} onChange={handleInputChange}></input>

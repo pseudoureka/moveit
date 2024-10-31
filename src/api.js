@@ -22,6 +22,18 @@ export async function createReview(formData) {
   return body;
 }
 
+export async function updateReview(id, formData) {
+  const response = await fetch(`${BASE_URL}/${id}`, {
+    method: "PUT",
+    body: formData,
+  });
+  const body = response.json();
+  if (!response.ok) {
+    throw new Error("리뷰를 수정하는데 실패했습니다.");
+  }
+  return body;
+}
+
 export async function deleteReview(id) {
   const response = await fetch(`${BASE_URL}/${id}`, {
     method: "DELETE",

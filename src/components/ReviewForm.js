@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./ReviewForm.css";
 import FileInput from "./FileInput";
 import RatingInput from "./RatingInput";
+import useTranslate from "./hooks/useTranslate";
 
 const INITIAL_VALUE = {
   title: "",
@@ -58,6 +59,8 @@ function ReviewForm({
     onSubmitSuccess(review);
   };
 
+  const t = useTranslate();
+
   return (
     <form className="ReviewForm">
       <FileInput
@@ -70,9 +73,9 @@ function ReviewForm({
       <RatingInput name="rating" value={value.rating} onChange={handleChange} />
       <input name="content" type="text" value={value.content} onChange={handleInputChange}></input>
       <button disabled={isSubmitting} type="submit" onClick={handleSubmit}>
-        확인
+        {t("confirm button")}
       </button>
-      {onCancel && <button onClick={onCancel}>취소</button>}
+      {onCancel && <button onClick={onCancel}>{t("cancel button")}</button>}
       {submitError?.message && <p>{submitError.message}</p>}
     </form>
   );

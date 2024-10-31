@@ -10,7 +10,13 @@ const INITIAL_VALUE = {
   imgFile: null,
 };
 
-function ReviewForm({ onSubmitSuccess, onSubmit, initialValue = INITIAL_VALUE, initialPreview }) {
+function ReviewForm({
+  onSubmitSuccess,
+  onSubmit,
+  initialValue = INITIAL_VALUE,
+  initialPreview,
+  onCancel,
+}) {
   const [value, setValue] = useState(initialValue);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
@@ -66,6 +72,7 @@ function ReviewForm({ onSubmitSuccess, onSubmit, initialValue = INITIAL_VALUE, i
       <button disabled={isSubmitting} type="submit" onClick={handleSubmit}>
         확인
       </button>
+      {onCancel && <button onClick={onCancel}>취소</button>}
       {submitError?.message && <p>{submitError.message}</p>}
     </form>
   );

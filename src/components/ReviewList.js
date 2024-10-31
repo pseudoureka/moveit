@@ -41,6 +41,11 @@ function ReviewList({ items, onDelete, onUpdateSuccess, onUpdate }) {
           const initialValue = { title, rating, content, imgFile: null };
 
           const handleSubmit = (formData) => onUpdate(id, formData);
+          const handleUpdatedSuccess = (review) => {
+            onUpdateSuccess(review);
+            setEditingId();
+          };
+          const handleCancel = () => setEditingId();
 
           return (
             <li key={item.id}>
@@ -48,7 +53,8 @@ function ReviewList({ items, onDelete, onUpdateSuccess, onUpdate }) {
                 initialValue={initialValue}
                 initialPreview={imgUrl}
                 onSubmit={handleSubmit}
-                onSubmitSuccess={onUpdateSuccess}
+                onSubmitSuccess={handleUpdatedSuccess}
+                onCancel={handleCancel}
               />
             </li>
           );

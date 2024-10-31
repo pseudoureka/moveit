@@ -2,6 +2,7 @@ import ReviewList from "./ReviewList";
 import { useEffect, useState } from "react";
 import { createReview, deleteReview, getReviews, updateReview } from "../api";
 import ReviewForm from "./ReviewForm";
+import LocaleSelect from "./LocaleSelect";
 
 const LIMIT = 6;
 
@@ -73,6 +74,7 @@ function App() {
 
   return (
     <div>
+      <LocaleSelect />
       <ReviewForm onSubmitSuccess={handleCreateSuccess} onSubmit={createReview} />
       <button onClick={handleNewestButton}>최신순</button>
       <button onClick={handleBestButton}>평점순</button>

@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { createReview, deleteReview, getReviews, updateReview } from "../api";
 import ReviewForm from "./ReviewForm";
 import LocaleSelect from "./LocaleSelect";
+import useAsync from "./hooks/useAsync";
+import { useCallback } from "react";
 
 const LIMIT = 6;
 
@@ -11,42 +13,34 @@ function App() {
   const [order, setOrder] = useState("createdAt");
   const [offset, setOffset] = useState(0);
   const [hasNext, setHasNext] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [loadingError, setLoadingError] = useState(null);
+  const [isLoading, loadingError, getReviewsAsync] = useAsync(getReviews);
 
   const sortedItems = items.sort((a, b) => b[order] - a[order]);
 
   const handleNewestButton = () => setOrder("createdAt");
   const handleBestButton = () => setOrder("rating");
 
-  const handleLoad = async (options) => {
-    let results;
+  const handleLoad = useCallback(
+    async (options) => {
+      let results = await getReviewsAsync(options);
+      if (!results) return;
 
-    try {
-      setIsLoading(true);
-      setLoadingError(null);
-      results = await getReviews(options);
-    } catch (e) {
-      setLoadingError(e);
-      return;
-    } finally {
-      setIsLoading(false);
-    }
+      const { reviews, paging } = results;
 
-    const { reviews, paging } = results;
-
-    if (options.offset === 0) {
-      setItems(reviews);
-    } else {
-      setItems((prevItems) => [...prevItems, ...reviews]);
-    }
-    setOffset(options.offset + reviews.length);
-    setHasNext(paging.hasNext);
-  };
+      if (options.offset === 0) {
+        setItems(reviews);
+      } else {
+        setItems((prevItems) => [...prevItems, ...reviews]);
+      }
+      setOffset(options.offset + reviews.length);
+      setHasNext(paging.hasNext);
+    },
+    [getReviewsAsync]
+  );
 
   useEffect(() => {
     handleLoad({ order, offset: 0, limit: LIMIT });
-  }, [order]);
+  }, [order, handleLoad]);
 
   const handleLoadMore = () => {
     handleLoad({ order, offset, limit: LIMIT });

@@ -3,6 +3,7 @@ import "./ReviewForm.css";
 import FileInput from "./FileInput";
 import RatingInput from "./RatingInput";
 import useTranslate from "./hooks/useTranslate";
+import useAsync from "./hooks/useAsync";
 
 const INITIAL_VALUE = {
   title: "",
@@ -19,8 +20,7 @@ function ReviewForm({
   onCancel,
 }) {
   const [value, setValue] = useState(initialValue);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState(null);
+  const [isSubmitting, submitError, onSubmitAsync] = useAsync(onSubmit);
 
   const handleChange = (name, value) => {
     setValue((prevValue) => ({
@@ -43,17 +43,9 @@ function ReviewForm({
     formData.append("content", value.content);
     formData.append("imgFile", value.imgFile);
 
-    let result;
+    let result = await onSubmitAsync(formData);
+    if (!result) return;
 
-    try {
-      setIsSubmitting(true);
-      result = await onSubmit(formData);
-    } catch (error) {
-      setSubmitError(error);
-      return;
-    } finally {
-      setIsSubmitting(false);
-    }
     const { review } = result;
     setValue(initialValue);
     onSubmitSuccess(review);

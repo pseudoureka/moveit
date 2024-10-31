@@ -2,7 +2,8 @@ import { useState } from "react";
 import "./ReviewForm.css";
 import FileInput from "./FileInput";
 import RatingInput from "./RatingInput";
-import { createReview } from "../api";
+import useTranslate from "./hooks/useTranslate";
+import useAsync from "./hooks/useAsync";
 
 const INITIAL_VALUE = {
   title: "",
@@ -11,10 +12,15 @@ const INITIAL_VALUE = {
   imgFile: null,
 };
 
-function ReviewForm({ onSubmit }) {
-  const [value, setValue] = useState(INITIAL_VALUE);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState(null);
+function ReviewForm({
+  onSubmitSuccess,
+  onSubmit,
+  initialValue = INITIAL_VALUE,
+  initialPreview,
+  onCancel,
+}) {
+  const [value, setValue] = useState(initialValue);
+  const [isSubmitting, submitError, onSubmitAsync] = useAsync(onSubmit);
 
   const handleChange = (name, value) => {
     setValue((prevValue) => ({
@@ -37,31 +43,31 @@ function ReviewForm({ onSubmit }) {
     formData.append("content", value.content);
     formData.append("imgFile", value.imgFile);
 
-    let result;
+    let result = await onSubmitAsync(formData);
+    if (!result) return;
 
-    try {
-      setIsSubmitting(true);
-      result = await createReview(formData);
-    } catch (error) {
-      setSubmitError(error);
-      return;
-    } finally {
-      setIsSubmitting(false);
-    }
     const { review } = result;
-    setValue(INITIAL_VALUE);
-    onSubmit(review);
+    setValue(initialValue);
+    onSubmitSuccess(review);
   };
+
+  const t = useTranslate();
 
   return (
     <form className="ReviewForm">
-      <FileInput name="imgFile" value={value.imgFile} onChange={handleChange} />
+      <FileInput
+        name="imgFile"
+        value={value.imgFile}
+        onChange={handleChange}
+        initialPreview={initialPreview}
+      />
       <input name="title" type="text" value={value.title} onChange={handleInputChange}></input>
       <RatingInput name="rating" value={value.rating} onChange={handleChange} />
       <input name="content" type="text" value={value.content} onChange={handleInputChange}></input>
       <button disabled={isSubmitting} type="submit" onClick={handleSubmit}>
-        확인
+        {t("confirm button")}
       </button>
+      {onCancel && <button onClick={onCancel}>{t("cancel button")}</button>}
       {submitError?.message && <p>{submitError.message}</p>}
     </form>
   );

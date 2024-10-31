@@ -1,8 +1,8 @@
 import { useRef, useEffect, useState } from "react";
 import "./FileInput.css";
 
-function FileInput({ name, value, onChange }) {
-  const [preview, setPreview] = useState();
+function FileInput({ name, value, onChange, initialPreview }) {
+  const [preview, setPreview] = useState(initialPreview);
 
   const inputRef = useRef();
 
@@ -26,10 +26,10 @@ function FileInput({ name, value, onChange }) {
     setPreview(nextPreview);
 
     return () => {
-      setPreview();
+      setPreview(initialPreview);
       URL.revokeObjectURL(nextPreview);
     };
-  }, [value]);
+  }, [value, initialPreview]);
 
   return (
     <div>
